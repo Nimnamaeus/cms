@@ -58,3 +58,30 @@
     transform: scale(1.1);
   }
   
+  .game__price {
+    font-size: 16px;
+    color: #666;
+  }
+
+  .game__buy-button {
+    background-color: #f50057;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .game__buy-button:hover {
+    background-color: #e0004f;
+  }
+ 
+
+.home {
+  text-align: center;
+  padding: 20px;
+  background-image: url('C:\Users\Dell\Desktop\Strapi\cms\my-first-react-app\src\components\Home\bg-image.jpg'); 
+  background-size: cover;
+  background-position: center;
+}
