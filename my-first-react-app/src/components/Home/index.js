@@ -1,10 +1,47 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { userData } from '../../helpers';
 import CustomNav from '../CustomNav';
 import './Homepage.css';
 
 const Homepage = () => {
-  const{username} = userData();
+  // Weather Data State
+  const [weatherData, setWeatherData] = useState(null);
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const response = await axios.get(
+          'https://api.openweathermap.org/data/2.5/weather?q=Butuan%20City&appid=2bfccfd0165ff2cd9dfaf8409a463326'
+        );
+        setWeatherData(response.data);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+
+    fetchWeatherData();
+  }, []);
+
+  // Video Games Data
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleBuyGame = (game) => {
+    setIsModalOpen(true);
+    console.log("Purchased Game:", game);
+  };
+
+  const handleConfirmPurchase = () => {
+    setIsModalOpen(false);
+    alert('Thank you for purchasing! Have fun playing!');
+  };
+
+  const handleCancelPurchase = () => {
+    setIsModalOpen(false);
+  };
+
+  const { username } = userData();
   const games = [
     {
       id: 1,
@@ -71,12 +108,48 @@ const Homepage = () => {
     },
   ];
 
+  if (!weatherData) {
+    return <div>Loading...</div>;
+  }
+
+  const formatTemperature = (kelvin) => {
+    const celsius = kelvin - 273.15;
+    return celsius.toFixed(1);
+  };
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return (
     <div>
       <CustomNav />
       <div className="home">
         <h2 className="home__title">Welcome {username} to the Video Game Homepage</h2>
-        <p className="home__subtitle">Check out these awesome video games:</p>
+        <h3 className="home__subtitle">Weather in {weatherData.name}</h3>
+        <div className="weather-container">
+          <div className="weather-info">
+            <div className="weather-info-item">
+              <span className="weather-info-label">Temperature:</span>
+              <span className="weather-info-value">
+                {formatTemperature(weatherData.main.temp)}°C
+              </span>
+            </div>
+            <div className="weather-info-item">
+              <span className="weather-info-label">Description:</span>
+              <span className="weather-info-value">
+                {capitalizeFirstLetter(weatherData.weather[0].description)}
+              </span>
+            </div>
+          </div>
+          <div className="weather-icon">
+            <img
+              src={`https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`}
+              alt="Weather Icon"
+            />
+          </div>
+        </div>
+        <p className="home__subtitle"  style={{ fontSize: '24px', marginTop: '2%' }}>Check out these awesome video games:</p>
         <div className="games">
           {games.map((game) => (
             <div key={game.id} className="game">
@@ -85,12 +158,27 @@ const Homepage = () => {
                 <h3 className="game__title">{game.title}</h3>
                 <p className="game__description">{game.description}</p>
                 <p className="game__price">{game.price}</p>
-                <button className="game__buy-button">Buy</button>
+                <button className="game__buy-button" onClick={() => handleBuyGame(game)}>
+                  Buy
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
+      {/* Modal for purchase confirmation */}
+      <Modal isOpen={isModalOpen} toggle={handleCancelPurchase}>
+        <ModalHeader toggle={handleCancelPurchase}>Confirm Purchase</ModalHeader>
+        <ModalBody>Are you sure you want to purchase this game?</ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleConfirmPurchase}>
+            Yes
+          </Button>
+          <Button color="secondary" onClick={handleCancelPurchase}>
+            No
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };

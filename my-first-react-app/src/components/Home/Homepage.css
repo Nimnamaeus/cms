@@ -7,13 +7,13 @@
   
   .home__title {
     font-size: 36px;
-    color: #b7abab;
+    color: #ffffff;
     margin-bottom: 10px;
   }
   
   .home__subtitle {
     font-size: 18px;
-    color:  x#666;
+    color:  x#666666;
     margin-bottom: 30px;
   }
   
@@ -84,4 +84,31 @@
   background-image: url('C:\Users\Dell\Desktop\Strapi\cms\my-first-react-app\src\components\Home\bg-image.jpg'); 
   background-size: cover;
   background-position: center;
+
+  border: 1px solid #d3279a;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  background-color: #1e90ff;
+  color: white;
+}
+
+.modal-body {
+  background-color: #f5f5f5;
+}
+
+.modal-footer {
+  background-color: #f5f5f5;
+}
+
+
+.weather-container {
+  border: 1px solid #ffffff;
+  border-radius: 5%;
+  padding: 1%;
+  margin-top: 1%;
 }
